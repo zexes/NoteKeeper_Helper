@@ -1,5 +1,6 @@
 package com.jwhh.jim.courseevents;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,7 @@ public class CourseEventsMainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_events_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         setupListView();
@@ -32,11 +33,14 @@ public class CourseEventsMainActivity extends AppCompatActivity
     private void setupCourseEventReceiver() {
         mCourseEventsReceiver = new CourseEventsReceiver();
         mCourseEventsReceiver.setCourseEventsDisplayCallbacks(this);
+
+        IntentFilter intentFilter = new IntentFilter(CourseEventsReceiver.ACTION_COURSE_EVENT);
+        registerReceiver(mCourseEventsReceiver, intentFilter);
     }
 
     @Override
     protected void onDestroy() {
-
+        unregisterReceiver(mCourseEventsReceiver);
         super.onDestroy();
     }
 
@@ -45,7 +49,7 @@ public class CourseEventsMainActivity extends AppCompatActivity
         mCourseEventsAdapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mCourseEvents);
 
-        final ListView listView = findViewById(R.id.list_course_events);
+        final ListView listView = (ListView) findViewById(R.id.list_course_events);
         listView.setAdapter(mCourseEventsAdapter);
     }
 
