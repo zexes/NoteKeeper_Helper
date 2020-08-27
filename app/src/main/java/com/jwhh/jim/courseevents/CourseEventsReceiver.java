@@ -10,11 +10,21 @@ public class CourseEventsReceiver extends BroadcastReceiver {
     public static final String EXTRA_COURSE_ID =  "com.jwhh.jim.notekeeper.extra.COURSE_ID";
     public static final String EXTRA_COURSE_MESSAGE =  "com.jwhh.jim.notekeeper.extra.COURSE_MESSAGE";
 
+    private CourseEventsDisplayCallbacks mCourseEventsDisplayCallbacks;
+
+    public void setCourseEventsDisplayCallbacks(CourseEventsDisplayCallbacks courseEventsDisplayCallbacks) {
+        mCourseEventsDisplayCallbacks = courseEventsDisplayCallbacks;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(ACTION_COURSE_EVENT.equals(intent.getAction())){
             String courseId = intent.getStringExtra(EXTRA_COURSE_ID);
             String courseMessage = intent.getStringExtra(EXTRA_COURSE_MESSAGE);
+
+            if(mCourseEventsDisplayCallbacks != null)
+                mCourseEventsDisplayCallbacks.onEventsReceived(courseId, courseMessage);
         }
     }
+
 }

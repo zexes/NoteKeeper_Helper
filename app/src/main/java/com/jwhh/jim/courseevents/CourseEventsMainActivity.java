@@ -11,10 +11,11 @@ import java.util.ArrayList;
 
 
 public class CourseEventsMainActivity extends AppCompatActivity
-        implements EventDisplayCallbacks {
+        implements CourseEventsDisplayCallbacks {
 
     ArrayList<String> mCourseEvents;
     ArrayAdapter<String> mCourseEventsAdapter;
+    private CourseEventsReceiver mCourseEventsReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,12 @@ public class CourseEventsMainActivity extends AppCompatActivity
 
         setupListView();
 
+        setupCourseEventReceiver();
+    }
 
+    private void setupCourseEventReceiver() {
+        mCourseEventsReceiver = new CourseEventsReceiver();
+        mCourseEventsReceiver.setCourseEventsDisplayCallbacks(this);
     }
 
     @Override
@@ -44,11 +50,9 @@ public class CourseEventsMainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEventReceived(String eventMessage) {
-        if(eventMessage != null) {
-            mCourseEvents.add(eventMessage);
-            mCourseEventsAdapter.notifyDataSetChanged();
-        }
+    public void onEventsReceived(String courseId, String courseMessage) {
+        String displayText = courseId + ": " + courseMessage;
+        mCourseEvents.add(displayText);
+        mCourseEventsAdapter.notifyDataSetChanged();
     }
-
 }
